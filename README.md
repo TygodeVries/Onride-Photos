@@ -1,4 +1,4 @@
-[Layout editor can be found here!])(https://thesheep.dev/photo/)
+[Layout editor can be found here!](https://thesheep.dev/photo/)
 
 
 Take pictures of people in your rollercoasters!
