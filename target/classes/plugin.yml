@@ -1,0 +1,9 @@
+name: OnridePhotos
+version: '1.0'
+main: dev.thesheep.onridePhotos.OnridePhotos
+api-version: '1.20'
+prefix: Wizard
+authors: [ Tygo de Vries ]
+website: https://thesheep.dev
+commands:
+  photo:
