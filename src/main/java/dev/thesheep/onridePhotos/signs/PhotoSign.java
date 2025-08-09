@@ -48,16 +48,8 @@ public class PhotoSign implements Listener {
 
         ItemFrame itemFrame = (ItemFrame) world.spawnEntity(itemFrameLocation, EntityType.ITEM_FRAME);
 
-        // Make the item frame face back toward the sign
         itemFrame.setFacingDirection(facing, true);
         itemFrame.setItem(new ItemStack(Material.MAP));
-
-        BlockFace[] adjacentDirections = new BlockFace[] {
-                getClockwise(facing),
-                getCounterClockwise(facing),
-                BlockFace.UP,
-                BlockFace.DOWN
-        };
 
         Vector pushDirection = null;  // Initialize to null
 
@@ -71,10 +63,8 @@ public class PhotoSign implements Listener {
                 if (entity instanceof ItemFrame) {
                     ItemFrame otherFrame = (ItemFrame) entity;
                     if (otherFrame.getFacing() == facing) {
-                        System.out.println("Found adjacent item frame at direction: " + dir);
-                        // Set pushDirection as vector of dir
                         pushDirection = new Vector(dir.getModX(), dir.getModY(), dir.getModZ());
-                        break; // Stop searching once found
+                        break;
                     }
                 }
             }
