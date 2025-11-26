@@ -4,6 +4,7 @@ import dev.thesheep.onridePhotos.OnridePhotos;
 import dev.thesheep.onridePhotos.content.Photo;
 import dev.thesheep.onridePhotos.content.Face;
 import dev.thesheep.onridePhotos.content.PhotoLayout;
+import dev.thesheep.onridePhotos.dependency.UUIDFixer;
 import dev.thesheep.onridePhotos.display.PhotoDisplay;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -42,7 +43,7 @@ public class PhotoCommand implements CommandExecutor {
         for(int i = 1; i < strings.length; i++)
         {
             OfflinePlayer selected = Bukkit.getOfflinePlayer(strings[i]);
-            faces[i - 1] = new Face(selected.getUniqueId());
+            faces[i - 1] = new Face(UUIDFixer.getWrappedUUID(selected));
         }
 
         Photo photo = new Photo(layout, faces);

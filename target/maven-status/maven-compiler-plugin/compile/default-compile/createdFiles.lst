@@ -1,4 +1,5 @@
 dev\thesheep\onridePhotos\display\PhotoDisplay.class
+dev\thesheep\onridePhotos\dependency\UUIDFixer.class
 dev\thesheep\onridePhotos\signs\TCPhotoSign$1.class
 dev\thesheep\onridePhotos\signs\TCPhotoSign.class
 dev\thesheep\onridePhotos\utils\SerializableVector.class

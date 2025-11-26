@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Photo {
@@ -102,10 +103,17 @@ public class Photo {
             String imageUrl = layout.getWebEndpointForFace(face);
             URL url = new URL(imageUrl);
 
-            return ImageIO.read(url);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            connection.setRequestProperty("Accept", "image/png,image/*;q=0.8,*/*;q=0.5");
+
+            BufferedImage image = ImageIO.read(connection.getInputStream());
+            connection.disconnect();
+            return image;
         } catch (Exception e)
         {
-            Bukkit.getLogger().warning("[Onride Photos] Could not download face for player: " + face.getPlayerUUID() + "because:\n" + e);
+            Bukkit.getLogger().warning("[Onride Photos] Could not download face for player: " + face.getPlayerUUID() + " because:\n" + e);
+            e.printStackTrace();
         }
 
         return null;

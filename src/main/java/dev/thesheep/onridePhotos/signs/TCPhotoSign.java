@@ -10,6 +10,7 @@ import dev.thesheep.onridePhotos.OnridePhotos;
 import dev.thesheep.onridePhotos.content.Face;
 import dev.thesheep.onridePhotos.content.Photo;
 import dev.thesheep.onridePhotos.content.PhotoLayout;
+import dev.thesheep.onridePhotos.dependency.UUIDFixer;
 import dev.thesheep.onridePhotos.display.PhotoDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Player;
@@ -57,7 +58,7 @@ public boolean match(SignActionEvent signActionEvent) {
         Face[] faces = new Face[players.size()];
 
         for (int i = 0; i < players.size(); i++) {
-            faces[i] = new Face(players.get(i).getUniqueId());
+            faces[i] = new Face(UUIDFixer.getWrappedUUID(players.get(i)));
         }
 
         Photo photo = new Photo(layout, faces);

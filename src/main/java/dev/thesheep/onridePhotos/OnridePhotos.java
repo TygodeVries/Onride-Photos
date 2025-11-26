@@ -9,6 +9,8 @@ import dev.thesheep.onridePhotos.content.PhotoLayout;
 import dev.thesheep.onridePhotos.display.PhotoDisplay;
 import dev.thesheep.onridePhotos.signs.PhotoSign;
 import dev.thesheep.onridePhotos.signs.TCPhotoSign;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -22,10 +24,30 @@ public final class OnridePhotos extends JavaPlugin {
     {
         return instance;
     }
-
+    public static boolean skinsRestorerInstalled;
     @Override
     public void onEnable() {
         // Plugin startup logic
+
+        // Check if we have a skin backup
+        skinsRestorerInstalled =
+                Bukkit.getPluginManager().getPlugin("SkinsRestorer") != null;
+
+        // Send a little message to inform users of SkinsRestorer
+        if(Bukkit.getOnlineMode())
+        {
+            this.getLogger().info("Your server is running in online mode, everything should function correctly.");
+        }
+        else {
+            if (skinsRestorerInstalled)
+            {
+                this.getLogger().info("Your server is running in offline mode, but you have SkinsRestorer installed so everything should function correctly.");
+            }
+            else {
+                this.getLogger().severe("You are running in offline mode, this might break some things, if it does, you can try installing SkinsRestorer.");
+            }
+        }
+
         instance = this;
 
         File imageFolder = new File(getDataFolder() + "/image");

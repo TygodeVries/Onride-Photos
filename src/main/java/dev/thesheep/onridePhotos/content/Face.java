@@ -1,5 +1,7 @@
 package dev.thesheep.onridePhotos.content;
 
+import dev.thesheep.onridePhotos.dependency.UUIDFixer;
+
 import java.util.UUID;
 
 public class Face {

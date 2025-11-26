@@ -1,9 +1,13 @@
 name: OnridePhotos
-version: '1.0'
+version: '1.1'
 main: dev.thesheep.onridePhotos.OnridePhotos
 api-version: '1.20'
-prefix: Wizard
+prefix: Onride-Photos
 authors: [ Tygo de Vries ]
 website: https://thesheep.dev
 commands:
   photo:
+softdepend:
+  - SkinsRestorer
+depend:
+  - Train_Carts
