@@ -9,6 +9,8 @@ import dev.thesheep.onridePhotos.content.PhotoLayout;
 import dev.thesheep.onridePhotos.display.PhotoDisplay;
 import dev.thesheep.onridePhotos.signs.PhotoSign;
 import dev.thesheep.onridePhotos.signs.TCPhotoSign;
+import net.skinsrestorer.api.SkinsRestorer;
+import net.skinsrestorer.api.SkinsRestorerProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,7 +43,17 @@ public final class OnridePhotos extends JavaPlugin {
         else {
             if (skinsRestorerInstalled)
             {
-                this.getLogger().info("Your server is running in offline mode, but you have SkinsRestorer installed so everything should function correctly.");
+                try {
+                    SkinsRestorer sr = SkinsRestorerProvider.get();
+                }
+                catch (Exception e)
+                {
+                    skinsRestorerInstalled = false;
+                    this.getLogger().info("Your server is running in offline mode, but you have SkinsRestorer installed. However, its not working as it should, and can not be used. This is because " + e);
+                }
+
+                if(skinsRestorerInstalled)
+                    this.getLogger().info("Your server is running in offline mode, but you have SkinsRestorer installed so everything should function correctly.");
             }
             else {
                 this.getLogger().severe("You are running in offline mode, this might break some things, if it does, you can try installing SkinsRestorer.");

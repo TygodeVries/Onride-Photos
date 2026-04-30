@@ -72,7 +72,9 @@ public class PhotoDisplay {
         World world = currentLocation.getWorld();
         Vector pushVec = pushDirection.toVector();
 
-        while (true) {
+        int attempts = 1000000;
+        while (attempts > 0) {
+            attempts--;
             Location checkLocation = currentLocation.clone().add(0.5, 0.5, 0.5);
 
             List<Entity> nearbyEntities = world.getNearbyEntities(checkLocation, 0.5, 0.5, 0.5).stream()

@@ -16,9 +16,9 @@ public class UUIDFixer {
             return offlinePlayer.getUniqueId();
         }
 
-        SkinsRestorer sr = SkinsRestorerProvider.get();
-
         try {
+            SkinsRestorer sr = SkinsRestorerProvider.get();
+
             var uuidGet = sr.getMojangAPI().getUUID(offlinePlayer.getName());
 
             if(uuidGet.isPresent())
@@ -31,7 +31,6 @@ public class UUIDFixer {
         } catch (Exception e)
         {
             Bukkit.getLogger().severe("Could not get real UUID of player " + offlinePlayer.getName() + " with UUID " + offlinePlayer.getUniqueId() + " because: " + e);
-            e.printStackTrace();
         }
 
         // Fallback

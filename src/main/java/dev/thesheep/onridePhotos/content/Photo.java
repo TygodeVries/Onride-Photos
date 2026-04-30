@@ -46,40 +46,75 @@ public class Photo {
             public void run() {
 
                 BufferedImage canvas = new BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB);
-                URL backgroundUrl;
 
+                /*
+                        Add Background Image
+                 */
                 try {
                     File imageFile = new File(OnridePhotos.getInstance().getDataFolder(), layout.getBackgroundImage() + ".png");
-                    canvas = ImageIO.read(imageFile);
+                    if(!imageFile.exists()) {
+                        OnridePhotos.getInstance().getLogger().severe("Could not find the background image to create photo! Was expecting a background picture at " + layout.getBackgroundImage() + ".png");
+                    }
+                    else {
+                        canvas = ImageIO.read(imageFile);
+                    }
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    OnridePhotos.getInstance().getLogger().severe("Failed to add background image onto photo because: " + e);
                 }
 
+
+                 /*
+                        Add faces
+                 */
 
                 Graphics graphics = canvas.createGraphics();
 
-                for(int i = 0; i < faces.length; i++)
-                {
-                    Face face = faces[i];
-                    FaceLayout faceLayout = layout.getFaceLayout(i);
-                    if(faceLayout == null)
-                        continue;
+                for(int i = 0; i < faces.length; i++) {
+                    try {
+                        Face face = faces[i];
+                        FaceLayout faceLayout = layout.getFaceLayout(i);
+                        if (faceLayout == null)
+                        {
+                            OnridePhotos.getInstance().getLogger().warning("Could not fit all riders onto photo, skipped rider " + i);
+                            continue;
+                        }
 
-                    BufferedImage faceImage = downloadFace(face, faceLayout);
+                        BufferedImage faceImage = downloadFace(face, faceLayout);
+                        if(faceImage == null) // in case it failed to load
+                        {
+                            OnridePhotos.getInstance().getLogger().warning("Removed a rider from the picture, because it failed to load.");
+                            continue;
+                        }
 
-                    graphics.drawImage(faceImage, faceLayout.getX(), faceLayout.getY(), faceLayout.getWidth(), faceLayout.getHeight(), null);
+                        graphics.drawImage(faceImage, faceLayout.getX(), faceLayout.getY(), faceLayout.getWidth(), faceLayout.getHeight(), null);
+                    }
+                    catch (Exception e)
+                    {
+                        OnridePhotos.getInstance().getLogger().severe("Could not add face to a photo! because: " + e);
+                    }
                 }
+
+                 /*
+                        Add Foreground Image
+                 */
 
                 try {
                     File imageFile = new File(OnridePhotos.getInstance().getDataFolder(), layout.getForegroundImage() + ".png");
-                    graphics.drawImage(ImageIO.read(imageFile), 0, 0, null);
+                    if(!imageFile.exists()) {
+                        OnridePhotos.getInstance().getLogger().severe("Could not find the foreground image to create photo! Was expecting a foreground picture at " + layout.getForegroundImage() + ".png");
+                    }
+                    else {
+                        graphics.drawImage(ImageIO.read(imageFile), 0, 0, null);
+                    }
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    OnridePhotos.getInstance().getLogger().severe("Failed to add foreground image onto photo because: " + e);
                 }
 
 
                 graphics.dispose();
                 result = canvas;
+
+                // Let everyone know we are done!
                 callback.runTaskLater(OnridePhotos.getInstance(), 1);
             }
         };
@@ -112,8 +147,7 @@ public class Photo {
             return image;
         } catch (Exception e)
         {
-            Bukkit.getLogger().warning("[Onride Photos] Could not download face for player: " + face.getPlayerUUID() + " because:\n" + e);
-            e.printStackTrace();
+            OnridePhotos.getInstance().getLogger().severe("Could not download face for player: " + face.getPlayerUUID() + " from the internet because:\n" + e);
         }
 
         return null;
@@ -124,7 +158,7 @@ public class Photo {
         BufferedImage result = getResult();
         if(result == null)
         {
-            Bukkit.getLogger().severe("The above is also the case for getResultAsMapItem!!!");
+            Bukkit.getLogger().severe("No result was returned, so the map is also not created.");
             return null;
         }
 

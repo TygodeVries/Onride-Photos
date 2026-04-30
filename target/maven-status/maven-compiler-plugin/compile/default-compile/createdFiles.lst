@@ -3,7 +3,6 @@ dev\thesheep\onridePhotos\dependency\UUIDFixer.class
 dev\thesheep\onridePhotos\signs\TCPhotoSign$1.class
 dev\thesheep\onridePhotos\signs\TCPhotoSign.class
 dev\thesheep\onridePhotos\utils\SerializableVector.class
-dev\thesheep\onridePhotos\signs\PhotoSign$1.class
 dev\thesheep\onridePhotos\OnridePhotos.class
 dev\thesheep\onridePhotos\utils\SerializableLocation.class
 dev\thesheep\onridePhotos\content\FaceLayout.class

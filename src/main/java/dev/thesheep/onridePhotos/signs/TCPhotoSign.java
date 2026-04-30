@@ -28,23 +28,14 @@ public boolean match(SignActionEvent signActionEvent) {
     @Override
     public void execute(SignActionEvent info) {
 
-        if (info.isTrainSign()
-                && info.isAction(SignActionType.GROUP_ENTER, SignActionType.REDSTONE_ON)
-                && info.isPowered() && info.hasGroup()
-        ) {
-            for (MinecartMember<?> member : info.getGroup()) {
+        if (info.isTrainSign() && info.isAction(SignActionType.GROUP_ENTER, SignActionType.REDSTONE_ON) && info.isPowered() && info.hasGroup())
+        {
+            for (MinecartMember<?> member : info.getGroup())
+            {
                 takePhoto(info, member);
             }
-            return;
         }
 
-        if (info.isCartSign()
-                && info.isAction(SignActionType.MEMBER_ENTER, SignActionType.REDSTONE_ON)
-                && info.isPowered() && info.hasMember()
-        ) {
-            takePhoto(info, info.getMember());
-            return;
-        }
     }
 
     public void takePhoto(SignActionEvent info, MinecartMember<?> member) {
@@ -52,7 +43,15 @@ public boolean match(SignActionEvent signActionEvent) {
         String display = (info.getLine(3));
 
         File file = new File(OnridePhotos.getInstance().getDataFolder() + "/layout/" + layoutFile + ".json");
+        if(!file.exists())
+        {
+            OnridePhotos.getInstance().getLogger().severe("A photo sign tried to take a picture for layout " + layoutFile + " but the layout could not be found. It was expected to be at " + file.getAbsolutePath());
+            return;
+        }
+
         PhotoLayout layout = PhotoLayout.loadFromFile(file);
+        if(layout == null)
+            return;
 
         List<Player> players = member.getEntity().getPlayerPassengers();
         Face[] faces = new Face[players.size()];

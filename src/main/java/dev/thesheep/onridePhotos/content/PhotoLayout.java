@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import dev.thesheep.onridePhotos.OnridePhotos;
 
 import java.io.File;
 import java.io.FileReader;
@@ -77,8 +78,8 @@ public class PhotoLayout {
             }
 
             return layout;
-        } catch (IOException | IllegalArgumentException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            OnridePhotos.getInstance().getLogger().severe("Failed to load a photo layout from file: " + file.getAbsolutePath() + " because: " + e);
             return null;
         }
     }

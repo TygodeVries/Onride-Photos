@@ -81,26 +81,5 @@ public class PhotoSign implements Listener {
         PhotoDisplay.displayList.add(photoDisplay);
         PhotoDisplay.saveAll();
     }
-
-
-    public BlockFace getClockwise(BlockFace face) {
-        switch(face) {
-            case NORTH: return BlockFace.EAST;
-            case EAST: return BlockFace.SOUTH;
-            case SOUTH: return BlockFace.WEST;
-            case WEST: return BlockFace.NORTH;
-            default: return face; // For UP, DOWN, or others just return same
-        }
-    }
-
-    public BlockFace getCounterClockwise(BlockFace face) {
-        switch(face) {
-            case NORTH: return BlockFace.WEST;
-            case WEST: return BlockFace.SOUTH;
-            case SOUTH: return BlockFace.EAST;
-            case EAST: return BlockFace.NORTH;
-            default: return face;
-        }
-    }
 }
 
