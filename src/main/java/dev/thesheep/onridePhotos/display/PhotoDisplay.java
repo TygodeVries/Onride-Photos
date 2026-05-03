@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -48,6 +49,25 @@ public class PhotoDisplay {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ItemFrame  raytracePhotoDisplay(Player player) {
+        Location eye = player.getEyeLocation();
+        Vector direction = eye.getDirection();
+
+        for (double i = 0; i < 10; i += 0.5) {
+            Location point = eye.clone().add(direction.clone().multiply(i));
+
+            for (Entity entity : point.getWorld().getNearbyEntities(point, 0.25, 0.25, 0.25)) {
+                if (entity instanceof ItemFrame frame) {
+
+                    if(frame.getItem().getType() == Material.FILLED_MAP)
+                        return  frame;
+                }
+            }
+        }
+
+        return  null;
     }
 
     public static void loadAll() {

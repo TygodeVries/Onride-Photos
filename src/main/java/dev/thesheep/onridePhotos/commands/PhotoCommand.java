@@ -43,7 +43,18 @@ public class PhotoCommand implements CommandExecutor {
         for(int i = 1; i < strings.length; i++)
         {
             OfflinePlayer selected = Bukkit.getOfflinePlayer(strings[i]);
-            faces[i - 1] = new Face(UUIDFixer.getWrappedUUID(selected));
+
+            String username = selected.getName();
+
+            // If the player is online, we can see if we can get a rank for example.
+            if(selected.isOnline())
+            {
+                Player p = (Player) selected;
+                username = p.getDisplayName();
+            }
+
+
+            faces[i - 1] = new Face(UUIDFixer.getWrappedUUID(selected), username);
         }
 
         Photo photo = new Photo(layout, faces);

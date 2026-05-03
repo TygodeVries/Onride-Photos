@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -19,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 public class PhotoSign implements Listener {
@@ -49,12 +51,17 @@ public class PhotoSign implements Listener {
         ItemFrame itemFrame = (ItemFrame) world.spawnEntity(itemFrameLocation, EntityType.ITEM_FRAME);
 
         itemFrame.setFacingDirection(facing, true);
-        itemFrame.setItem(new ItemStack(Material.MAP));
+
+        ItemStack yay = new ItemStack(Material.EMERALD);
+        ItemMeta yayMeta = yay.getItemMeta();
+        yayMeta.setDisplayName("§aSuccess!");
+        yay.setItemMeta(yayMeta);
+        itemFrame.setItem(yay);
 
         Vector pushDirection = null;  // Initialize to null
 
         BlockFace[] adjacentDirectionsNew = new BlockFace[] {
-                BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST
+                BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN
         };
 
         for (BlockFace dir : adjacentDirectionsNew) {
@@ -71,15 +78,34 @@ public class PhotoSign implements Listener {
             if (pushDirection != null) break;
         }
 
+        if (pushDirection == null || pushDirection.length() < 0.1) {
+
+            event.setLine(0, "§c§lFAILED");
+            event.setLine(1, "§cAt least one");
+            event.setLine(2, "§cother itemframe");
+            event.setLine(3, "§crequired in row");
+            itemFrame.remove();
+            return;
+        }
+
         event.getBlock().setType(Material.AIR);
 
-        if (pushDirection == null) {
-            pushDirection = new Vector(0, 0, 0);
+        for(int i = 0; i < PhotoDisplay.displayList.size(); i++)
+        {
+            if(PhotoDisplay.displayList.get(i).id.equalsIgnoreCase(id))
+            {
+                event.getPlayer().sendMessage("§6Overwriting old photo display!");
+                PhotoDisplay.displayList.remove(i);
+                i--;
+            }
         }
 
         PhotoDisplay photoDisplay = new PhotoDisplay(new SerializableLocation(itemFrame.getLocation().getBlock().getLocation()), id, new SerializableVector(pushDirection));
         PhotoDisplay.displayList.add(photoDisplay);
         PhotoDisplay.saveAll();
+
+
+        event.getPlayer().sendMessage("§aCreated photo display with ID: " + photoDisplay.id);
     }
 }
 

@@ -1,12 +1,16 @@
 package dev.thesheep.onridePhotos;
 
+import com.bergerkiller.bukkit.common.collections.EntryList;
 import com.bergerkiller.bukkit.tc.signactions.SignAction;
 import dev.thesheep.onridePhotos.commands.PhotoCommand;
 import dev.thesheep.onridePhotos.content.Face;
 import dev.thesheep.onridePhotos.content.FaceLayout;
 import dev.thesheep.onridePhotos.content.FaceType;
 import dev.thesheep.onridePhotos.content.PhotoLayout;
+import dev.thesheep.onridePhotos.display.DisplaySelector;
 import dev.thesheep.onridePhotos.display.PhotoDisplay;
+import dev.thesheep.onridePhotos.listeners.PhotoUpdater;
+import dev.thesheep.onridePhotos.listeners.UsePhotoDisplay;
 import dev.thesheep.onridePhotos.signs.PhotoSign;
 import dev.thesheep.onridePhotos.signs.TCPhotoSign;
 import net.skinsrestorer.api.SkinsRestorer;
@@ -17,10 +21,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public final class OnridePhotos extends JavaPlugin {
 
+    public static ArrayList<Integer> activeMaps = new ArrayList<Integer>();
     private static OnridePhotos instance;
     public static OnridePhotos getInstance()
     {
@@ -79,6 +86,12 @@ public final class OnridePhotos extends JavaPlugin {
 
         this.getCommand("photo").setExecutor(new PhotoCommand());
         this.getServer().getPluginManager().registerEvents(new PhotoSign(), this);
+
+        // Get the fixer ready!
+        this.getServer().getPluginManager().registerEvents(new PhotoUpdater(), this);
+
+        this.getServer().getPluginManager().registerEvents(new UsePhotoDisplay(), this);
+        DisplaySelector.start();
     }
 
     @Override

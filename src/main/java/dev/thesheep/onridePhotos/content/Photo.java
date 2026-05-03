@@ -3,22 +3,30 @@ package dev.thesheep.onridePhotos.content;
 import dev.thesheep.onridePhotos.OnridePhotos;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapPalette;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.imageio.ImageIO;
+import javax.naming.Name;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Photo {
 
@@ -72,6 +80,9 @@ public class Photo {
                 for(int i = 0; i < faces.length; i++) {
                     try {
                         Face face = faces[i];
+                        if(face == null)
+                            continue;
+
                         FaceLayout faceLayout = layout.getFaceLayout(i);
                         if (faceLayout == null)
                         {
@@ -156,34 +167,81 @@ public class Photo {
     public ItemStack getResultAsMapItem(World world)
     {
         BufferedImage result = getResult();
-        if(result == null)
+        if (result == null)
         {
             Bukkit.getLogger().severe("No result was returned, so the map is also not created.");
             return null;
         }
 
         MapView mapView = Bukkit.createMap(world);
-        mapView.addRenderer(new MapRenderer() {
-            private boolean hasRendered = false;
-
-            @Override
-            public void render(MapView view, MapCanvas canvas, Player player) {
-                if (hasRendered) return;
-                hasRendered = true;
-
-                for (int x = 0; x < 128; x++) {
-                    for (int y = 0; y < 128; y++) {
-                        int rgb = result.getRGB(x, y);
-                        byte color = MapPalette.matchColor(new Color(rgb, true));
-                        canvas.setPixel(x, y, color);
-                    }
-                }
-            }
-        });
+        mapView.getRenderers().clear();
+        mapView.addRenderer(new PhotoRenderer(result));
 
         ItemStack mapItem = new ItemStack(Material.FILLED_MAP);
         MapMeta meta = (MapMeta) mapItem.getItemMeta();
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy • HH:mm");
+
+        meta.setDisplayName("§fRide Photo");
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
+        List<String> lore = new ArrayList<>();
+        lore.add("§8──────────────");
+        lore.add("§7Captured §f" + now.format(formatter));
+        lore.add("§8");
+
+        if (faces.length > 0)
+        {
+            lore.add("§7Guests:");
+
+            StringBuilder guestData = new StringBuilder();
+
+            for (int i = 0; i < faces.length; i++)
+            {
+                Face face = faces[i];
+
+                lore.add("§f▸ " + face.getPlayerName());
+
+                guestData.append(face.getPlayerUUID());
+                if (i < faces.length - 1) {
+                    guestData.append(";");
+                }
+            }
+
+            meta.getPersistentDataContainer().set(
+                    new NamespacedKey(OnridePhotos.getInstance(), "guests"),
+                    PersistentDataType.STRING,
+                    guestData.toString()
+            );
+        }
+        else
+        {
+            lore.add("§7No guests detected");
+
+            meta.getPersistentDataContainer().set(
+                    new NamespacedKey(OnridePhotos.getInstance(), "guests"),
+                    PersistentDataType.STRING,
+                    ""
+            );
+        }
+
+        meta.getPersistentDataContainer().set(
+                new NamespacedKey(OnridePhotos.getInstance(), "layout"),
+                PersistentDataType.STRING,
+                layout.getLayoutId()
+        );
+
+        lore.add("§8──────────────");
+
+        meta.setLore(lore);
+
+        meta.setCustomModelData(1);
         meta.setMapView(mapView);
+
         mapItem.setItemMeta(meta);
 
         return mapItem;

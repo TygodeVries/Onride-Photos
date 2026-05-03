@@ -57,7 +57,7 @@ public boolean match(SignActionEvent signActionEvent) {
         Face[] faces = new Face[players.size()];
 
         for (int i = 0; i < players.size(); i++) {
-            faces[i] = new Face(UUIDFixer.getWrappedUUID(players.get(i)));
+            faces[i] = new Face(UUIDFixer.getWrappedUUID(players.get(i)), players.get(i).getDisplayName());
         }
 
         Photo photo = new Photo(layout, faces);

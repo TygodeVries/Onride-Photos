@@ -7,14 +7,16 @@ import java.util.UUID;
 public class Face {
 
     private final UUID playerUuid;
+    private final String username;
 
     /**
      * Create a face from a player UUID
      * @param playerUuid
      */
-    public Face(UUID playerUuid)
+    public Face(UUID playerUuid, String username)
     {
         this.playerUuid = playerUuid;
+        this.username = username;
     }
 
     /**
@@ -25,4 +27,5 @@ public class Face {
     {
         return playerUuid;
     }
+    public String getPlayerName() {return username;}
 }

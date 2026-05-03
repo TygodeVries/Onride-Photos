@@ -14,6 +14,12 @@ import java.util.List;
 
 public class PhotoLayout {
     private List<FaceLayout> faceLayouts;
+    private String layoutId;
+
+    public String getLayoutId() {
+        return layoutId;
+    }
+
     private String backgroundImage;
     private String foregroundImage;
 
@@ -27,8 +33,9 @@ public class PhotoLayout {
         return "image/" + foregroundImage;
     }
 
-    public PhotoLayout(String backgroundImage, String foregroundImage)
+    public PhotoLayout(String backgroundImage, String foregroundImage, String layoutId)
     {
+        this.layoutId = layoutId;
         this.foregroundImage = foregroundImage;
         this.backgroundImage = backgroundImage;
         faceLayouts = new ArrayList<>();
@@ -63,7 +70,8 @@ public class PhotoLayout {
             String background = json.get("background").getAsString();
             String foreground = json.get("foreground").getAsString();
 
-            PhotoLayout layout = new PhotoLayout(background, foreground);
+            String layoutId = "file:" + file.getPath();
+            PhotoLayout layout = new PhotoLayout(background, foreground, layoutId);
 
             JsonArray facesArray = json.getAsJsonArray("faces");
             for (JsonElement elem : facesArray) {

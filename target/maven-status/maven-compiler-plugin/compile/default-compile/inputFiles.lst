@@ -4,10 +4,16 @@ C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\content\Fac
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\content\FaceType.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\content\Photo.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\content\PhotoLayout.java
+C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\content\PhotoRenderer.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\dependency\UUIDFixer.java
+C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\display\DisplaySelector.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\display\PhotoDisplay.java
+C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\display\PhotoPass.java
+C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\listeners\PhotoUpdater.java
+C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\listeners\UsePhotoDisplay.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\OnridePhotos.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\signs\PhotoSign.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\signs\TCPhotoSign.java
+C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\utils\FancyParticles.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\utils\SerializableLocation.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\utils\SerializableVector.java
