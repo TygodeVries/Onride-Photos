@@ -1,0 +1,19 @@
+enabled: false
+
+# Current options: 'supabase'
+provider: supabase
+
+
+## SUPABASE ##
+supabase:
+  # The project ID of your supabase project. https://YOUR_PROJECT_ID.supabase.co
+  project: ""
+
+  # The key for the server
+  servicekey: ""
+
+  # The bucket where to upload the image data to.
+  bucket: "photos"
+
+  # The name of the table where photo info should be stored.
+  table: "photos"

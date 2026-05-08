@@ -7,6 +7,9 @@ import dev.thesheep.onridePhotos.content.Face;
 import dev.thesheep.onridePhotos.content.FaceLayout;
 import dev.thesheep.onridePhotos.content.FaceType;
 import dev.thesheep.onridePhotos.content.PhotoLayout;
+import dev.thesheep.onridePhotos.database.Database;
+import dev.thesheep.onridePhotos.database.providers.NoDatabaseProvider;
+import dev.thesheep.onridePhotos.database.providers.SupabaseProvider;
 import dev.thesheep.onridePhotos.display.DisplaySelector;
 import dev.thesheep.onridePhotos.display.PhotoDisplay;
 import dev.thesheep.onridePhotos.listeners.PhotoUpdater;
@@ -17,6 +20,7 @@ import net.skinsrestorer.api.SkinsRestorer;
 import net.skinsrestorer.api.SkinsRestorerProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -92,6 +96,86 @@ public final class OnridePhotos extends JavaPlugin {
 
         this.getServer().getPluginManager().registerEvents(new UsePhotoDisplay(), this);
         DisplaySelector.start();
+
+        initDatabase();
+    }
+
+    Database database;
+
+    public Database getDatabase() {
+
+        if(database == null)
+            database = new NoDatabaseProvider();
+
+        return database;
+    }
+
+    public void reload() {
+        reloadConfig();
+        initDatabase();
+    }
+
+    void initDatabase() {
+
+        File file = new File(getDataFolder(), "database.yml");
+
+        if(!file.exists())
+        {
+            this.getLogger().info("Database config was not found, creating one!");
+            saveResource("database.yml", false);
+        }
+
+        YamlConfiguration databaseConfig = YamlConfiguration.loadConfiguration(file);
+        boolean enabled = databaseConfig.getBoolean("enabled");
+
+        if(!enabled)
+        {
+            this.getLogger().info("Database is not enabled, so no photos will be uploaded.");
+            return;
+        }
+
+        String provider = databaseConfig.getString("provider");
+        if(provider == null)
+        {
+            this.getLogger().severe("Database.yml does not contain a 'provider' field. No provider was given");
+            return;
+        }
+
+        if(provider.equalsIgnoreCase("supabase"))
+        {
+            this.getLogger().info("Using supabase as provider.");
+
+            String project = databaseConfig.getString("supabase.project");
+            String key = databaseConfig.getString("supabase.servicekey");
+            String bucket = databaseConfig.getString("supabase.bucket");
+            String table = databaseConfig.getString("supabase.table");
+
+            if(project == null) {
+                this.getLogger().severe("You are using supabase, but supabase.project is not defined.");
+                return;
+            }
+
+            if(key == null) {
+                this.getLogger().severe("You are using supabase, but supabase.servicekey is not defined.");
+                return;
+            }
+
+            if(bucket == null) {
+                this.getLogger().severe("You are using supabase, but supabase.bucket is not defined.");
+                return;
+            }
+
+            if(table == null) {
+                this.getLogger().severe("You are using supabase, but supabase.table is not defined.");
+                return;
+            }
+
+            database = new SupabaseProvider(project, key, bucket, table);
+        }
+        else {
+            this.getLogger().severe("The database provider " + provider + " is invalid. Please conduct documentation for setup.");
+            return;
+        }
     }
 
     @Override

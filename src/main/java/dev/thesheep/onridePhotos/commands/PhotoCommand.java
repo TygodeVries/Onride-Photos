@@ -35,6 +35,15 @@ public class PhotoCommand implements CommandExecutor {
             return true;
         }
 
+        if(strings[0].equalsIgnoreCase("reload") && commandSender.isOp())
+        {
+            commandSender.sendMessage("§cReloading...");
+            OnridePhotos.getInstance().reload();
+            commandSender.sendMessage("§aReload complete!");
+
+            return true;
+        }
+
         String layoutFile = strings[0];
         File file = new File(OnridePhotos.getInstance().getDataFolder() + "/layout/" + layoutFile + ".json");
         PhotoLayout layout = PhotoLayout.loadFromFile(file);

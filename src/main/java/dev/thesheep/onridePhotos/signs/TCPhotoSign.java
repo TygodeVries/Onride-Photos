@@ -10,6 +10,7 @@ import dev.thesheep.onridePhotos.OnridePhotos;
 import dev.thesheep.onridePhotos.content.Face;
 import dev.thesheep.onridePhotos.content.Photo;
 import dev.thesheep.onridePhotos.content.PhotoLayout;
+import dev.thesheep.onridePhotos.database.ImageMetadata;
 import dev.thesheep.onridePhotos.dependency.UUIDFixer;
 import dev.thesheep.onridePhotos.display.PhotoDisplay;
 import org.bukkit.entity.Display;
@@ -17,6 +18,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 
@@ -73,6 +77,34 @@ public boolean match(SignActionEvent signActionEvent) {
                 }
                 else {
                     PhotoDisplay.getById(display).addImage(result);
+                }
+
+                try {
+
+                    // Only upload the image if there are actually people in the cart.
+                    if(players.size() > 0) {
+
+                        BufferedImage image = photo.getResult();
+
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+                        ImageIO.write(image, "png", baos);
+
+                        byte[] imageBytes = baos.toByteArray();
+
+                        String[] playerIds = new String[faces.length];
+
+
+                        for(int i = 0; i < playerIds.length; i++)
+                        {
+                            playerIds[i] = faces[i].getPlayerUUID().toString();
+                        }
+
+                        OnridePhotos.getInstance().getDatabase().uploadPhoto(new ImageMetadata(layout.getLayoutId(), playerIds), imageBytes);
+                    }
+                } catch (Exception e)
+                {
+                    OnridePhotos.getInstance().getLogger().severe("Failed to upload image to the database: " + e);
                 }
             }
         });

@@ -5,6 +5,10 @@ C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\content\Fac
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\content\Photo.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\content\PhotoLayout.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\content\PhotoRenderer.java
+C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\database\Database.java
+C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\database\ImageMetadata.java
+C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\database\providers\NoDatabaseProvider.java
+C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\database\providers\SupabaseProvider.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\dependency\UUIDFixer.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\display\DisplaySelector.java
 C:\Users\zttde\Onride-Photos\src\main\java\dev\thesheep\onridePhotos\display\PhotoDisplay.java
