@@ -1,0 +1,69 @@
+<body>
+    <h1>My awesome pictures!</h1>
+    <div id="gallery"></div>
+</body>
+
+<script>
+const SUPABASE_URL="https://[PROJECT ID].supabase.co";
+const KEY="ANON_KEY";
+const BUCKET="photos";
+
+// get the amount most recent photos for a given layout
+async function getPhotos(layout, amount){
+
+  // build the query params
+  const params = new URLSearchParams({
+    layout: `eq.${layout}`,
+    order: "created_at.desc",
+    limit: amount.toString()
+  });
+
+  // fetch the photos from supabase
+  const r = await fetch(
+    `${SUPABASE_URL}/rest/v1/photos?${params}`,
+    {
+      headers: {
+        apikey: KEY,
+        Authorization: `Bearer ${KEY}`
+      }
+    }
+  );
+
+  return r.json();
+}
+
+// get the public url for a given photo id
+function getImageUrl(id){
+  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${id}.png`;
+}
+
+// render the photos in the gallery
+function renderPhotos(photos){
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = "";
+
+  photos.forEach(p => {
+    const img = document.createElement("img");
+    img.src = getImageUrl(p.id);
+    img.classList.add("photo"); // add the photo class for pixelated rendering
+    img.style.margin = "10px";
+
+    gallery.appendChild(img);
+
+    const caption = document.createElement("div");
+    caption.innerText = `Photo taken at ${new Date(p.created_at).toLocaleString()}`;
+    gallery.appendChild(caption);
+  });
+}
+
+// load + render
+getPhotos("test.json", 5).then(renderPhotos);
+</script>
+
+<style>
+    .photo {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    width: 300px;
+    }
+</style>

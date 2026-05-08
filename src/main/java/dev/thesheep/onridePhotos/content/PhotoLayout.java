@@ -20,6 +20,18 @@ public class PhotoLayout {
         return layoutId;
     }
 
+    public String getSimpleLayoutId() {
+        String layoutId = "file:plugins\\OnridePhotos\\layout\\test.json";
+
+        // remove "file:" prefix if present
+        if (layoutId.startsWith("file:")) {
+            layoutId = layoutId.substring(5);
+        }
+
+        // normalize separators and extract filename
+        return new File(layoutId).getName();
+    }
+
     private String backgroundImage;
     private String foregroundImage;
 

@@ -1,6 +1,7 @@
 package dev.thesheep.onridePhotos.content;
 
 import dev.thesheep.onridePhotos.OnridePhotos;
+import dev.thesheep.onridePhotos.database.ImageMetadata;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -20,6 +21,7 @@ import javax.imageio.ImageIO;
 import javax.naming.Name;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -127,6 +129,32 @@ public class Photo {
 
                 // Let everyone know we are done!
                 callback.runTaskLater(OnridePhotos.getInstance(), 1);
+
+                try {
+
+                    // Only upload the image if there are actually people in the cart.
+                    if(faces.length > 0) {
+
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+                        ImageIO.write(result, "png", baos);
+
+                        byte[] imageBytes = baos.toByteArray();
+
+                        String[] playerIds = new String[faces.length];
+
+
+                        for(int i = 0; i < playerIds.length; i++)
+                        {
+                            playerIds[i] = faces[i].getPlayerUUID().toString();
+                        }
+
+                        OnridePhotos.getInstance().getDatabase().uploadPhoto(new ImageMetadata(layout.getSimpleLayoutId(), playerIds), imageBytes);
+                    }
+                } catch (Exception e)
+                {
+                    OnridePhotos.getInstance().getLogger().severe("Failed to upload image to the database: " + e);
+                }
             }
         };
 
