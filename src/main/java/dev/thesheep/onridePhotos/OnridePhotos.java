@@ -117,6 +117,8 @@ public final class OnridePhotos extends JavaPlugin {
 
     void initDatabase() {
 
+        database = null;
+
         File file = new File(getDataFolder(), "database.yml");
 
         if(!file.exists())

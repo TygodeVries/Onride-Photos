@@ -7,6 +7,7 @@
 const SUPABASE_URL="https://[PROJECT ID].supabase.co";
 const KEY="ANON_KEY";
 const BUCKET="photos";
+const LAYOUT="test.json"; // The name of your layout, as seen on the database in the 'layout' column
 
 // get the amount most recent photos for a given layout
 async function getPhotos(layout, amount){
@@ -57,7 +58,7 @@ function renderPhotos(photos){
 }
 
 // load + render
-getPhotos("test.json", 5).then(renderPhotos);
+getPhotos(LAYOUT, 5).then(renderPhotos);
 </script>
 
 <style>
