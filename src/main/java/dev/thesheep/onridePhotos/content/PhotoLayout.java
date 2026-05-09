@@ -21,15 +21,18 @@ public class PhotoLayout {
     }
 
     public String getSimpleLayoutId() {
-        String layoutId = "file:plugins\\OnridePhotos\\layout\\test.json";
+        String id = getLayoutId();
 
-        // remove "file:" prefix if present
-        if (layoutId.startsWith("file:")) {
-            layoutId = layoutId.substring(5);
+        if (id.startsWith("file:")) {
+            id = id.substring(5);
         }
 
-        // normalize separators and extract filename
-        return new File(layoutId).getName();
+        // fix linux bug
+        id = id.replace('\\', '/');
+
+        // extract filename
+        int idx = id.lastIndexOf('/');
+        return (idx >= 0) ? id.substring(idx + 1) : id;
     }
 
     private String backgroundImage;

@@ -6,7 +6,7 @@
 
     <groupId>dev.thesheep</groupId>
     <artifactId>OnridePhotos</artifactId>
-    <version>1.2</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <name>OnridePhotos</name>
